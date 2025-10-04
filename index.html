@@ -4,27 +4,260 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perkembangan Ekonomi Islam - Dinasti Abbasiyyah</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --color-bg: #10151b;
+        --color-surface: #131b23;
+        --color-card: #19232c;
+        --color-accent: #1bc6b4;
+        --color-accent2: #14b4b1;
+        --color-gradient-bg: linear-gradient(135deg, #14232c 0%, #223241 100%);
+        --color-gradient-card: linear-gradient(135deg, #223241bb 0%, #181e2590 100%);
+        --color-shadow: 0 4px 40px 0 rgba(27, 198, 180, 0.10), 0 2px 8px 0 rgba(19,27,35,0.12);
+        --color-primary: #1bc6b4;
+        --color-primary-light: #37ffe0;
+        --color-primary-dark: #0ca687;
+        --color-warning: #ffb680;
+        --color-error: #fe6868;
+        --color-success: #51e2a4;
+        --color-text: #eaf7fd;
+        --color-text-faded: #b8ccd7;
+        --color-border: #243144;
+        --color-muted: #2c3947;
+        --transition: all 280ms cubic-bezier(.22,.61,.36,1);
+        --radius: 20px;
+        --radius-sm: 12px;
+        --sp-1: 4px;
+        --sp-2: 8px;
+        --sp-3: 18px;
+        --sp-4: 30px
+    }
+
+    html, body {
+        background: var(--color-gradient-bg);
+        font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        margin: 0; padding: 0;
+        color: var(--color-text);
+        min-height: 100vh;
+        transition: var(--transition);
+    }
+
+    .presentation-container {
+        position: relative;
+        width: 100vw; height: 100vh;
+        overflow: hidden;
+        background: var(--color-gradient-bg);
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+
+    .progress-bar {
+        position:fixed; top:0; left:0; width:100%;
+        height:4px;
+        background: rgba(27,198,180,0.1);
+        z-index:123;
+    }
+    .progress-fill {
+        height:100%;
+        background: linear-gradient(90deg, var(--color-accent), var(--color-primary-light));
+        box-shadow: 0 2px 8px var(--color-accent2);
+        width:10%; /* Diubah dengan JS sesuai slide */
+        transition: var(--transition);
+    }
+
+    .slide-counter {
+        position:fixed;
+        top:18px; right:24px;
+        background: rgba(36,49,68,0.95);
+        color:var(--color-text-faded);
+        padding: var(--sp-2) var(--sp-3);
+        border-radius: 99px;
+        font-size: .98rem;
+        box-shadow: var(--color-shadow);
+        z-index:130;
+        border: 1.2px solid var(--color-primary);
+    }
+
+    .slides-wrapper {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .slide {
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(80px) scale(0.98);
+        display: flex;
+        align-items: center; justify-content: center;
+        transition: var(--transition);
+    }
+    .slide.active {
+        opacity: 1;
+        pointer-events: all;
+        transform: translateY(0) scale(1);
+        z-index: 10;
+    }
+    .slide-content {
+        width: 99%;
+        max-width: 780px;
+        background: var(--color-gradient-card);
+        border-radius: var(--radius);
+        padding: var(--sp-4) var(--sp-4);
+        min-height: 540px;
+        box-shadow: var(--color-shadow);
+        border: 1px solid var(--color-border);
+        display: flex; flex-direction: column; justify-content: center;
+        position: relative;
+        overflow: hidden;
+        margin: auto;
+        gap: 10px;
+    }
+    .title-slide {
+        background: linear-gradient(135deg,#14343d 40%,var(--color-primary) 120%);
+        color:var(--color-text);
+        text-align:center;
+        box-shadow: var(--color-shadow);
+    }
+    .title-slide h1 {
+        font-size: 2.2rem;
+        color: var(--color-primary-light);
+        margin-bottom: 12px;
+        letter-spacing: -1px;
+        font-weight: 700;
+    }
+    .title-slide h2 {
+        color: var(--color-accent2);
+        font-size:1.2rem;
+        margin-bottom: 28px;
+        font-weight: 400;
+        opacity: 0.9;
+    }
+    .islamic-pattern {
+        position:absolute;bottom:-40px;right:-50px;width:310px;height:160px;z-index:0;
+        background: url("data:image/svg+xml,%3Csvg width='160' height='82' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%231bc6b420' d='M156 81.5c0-44.183-35.817-80-80-80-44.183 0-80 35.817-80 80h160Z'/%3E%3C/svg%3E") no-repeat;
+    }
+    .slide-content .slide-img {
+        display:block;margin:16px auto 24px auto;max-width:30%;background:rgba(36,49,68,.33);border-radius:16px;box-shadow:0 2px 20px #1bc6b492;padding:8px;
+        backdrop-filter: blur(2px);
+    }
+    .author-info {
+        margin-top: 30px;
+        background:rgba(24,32,48, 0.30);
+        border-radius: var(--radius-sm);
+        backdrop-filter: blur(3px);
+        padding:12px 22px;display:inline-block;
+        color: var(--color-primary-light);box-shadow: 0 1px 10px #16353a99;
+        font-size: 1.05rem;
+    }
+    /* Outline, Card, Table, Grid Styles */
+    .outline-list, .trade-content, .conclusion-points {margin-top:18px; gap:18px;}
+    .outline-item, .conclusion-item, .trade-item { display:flex; align-items:center; background:var(--color-card);border-radius:14px; box-shadow: 0 1px 10px #14b4b133; border-left:4px solid var(--color-primary); padding:1em 1.5em; margin-bottom:10px;}
+    .outline-item .number {
+        background: var(--color-primary);
+        color: #191c21;
+        width:32px; height:32px; border-radius: 50%;
+        font-weight:900;padding-top:6px;text-align:center;
+        margin-right:18px; font-size: 1.1rem;
+        box-shadow: 0 1px 6px #1bc6b446;
+    }
+    .outline-item .text {font-size:1.05rem;}
+    .content-grid, .instrument-grid, .currency-grid {
+        margin-top:18px; gap:20px; display:grid; grid-template-columns:repeat(2,1fr);
+    }
+    .content-grid {grid-template-columns:repeat(2,1fr);}
+    .instrument-grid, .currency-grid {grid-template-columns:repeat(3,1fr);}
+    .point-card, .instrument-card, .currency-card {
+        background: var(--color-muted);
+        border-radius: 16px;
+        border:1.5px solid var(--color-border);
+        box-shadow:0 1px 12px #0ca68736;
+        padding:24px;
+        text-align:center;
+        transition: var(--transition);
+    }
+    .point-card:hover, .instrument-card:hover, .currency-card:hover {
+        background: var(--color-surface);transform:scale(1.02);border-color:var(--color-primary);
+        box-shadow:0 3px 24px #1bc6b431;
+    }
+    .instrument-icon, .currency-icon { font-size:35px;margin-bottom:10px;}
+    .currency-card.gold {background: linear-gradient(135deg,#303c2a 30%,#a0924b99 100%);}
+    .currency-card.silver {background: linear-gradient(135deg,#383d42 30%,#cccccc2c 100%);}
+    .currency-card.copper {background: linear-gradient(135deg,#3e2e29 40%,#d2b38044 100%);}
+    .fiscal-table-container, .urbanization-table-container {overflow-x:auto;margin-top:20px;}
+    table.fiscal-table, table.urbanization-table {
+        width:100%; border-radius:14px; overflow:hidden; border-collapse:collapse; background:var(--color-card);
+        box-shadow: 0 1px 10px #14b4b122;
+    }
+    th,td {padding:14px 16px;}
+    thead tr {background:var(--color-primary);}
+    thead th {color:#10151b;font-weight:700;}
+    tbody tr {border-bottom:1px solid var(--color-border);}
+    tbody tr:hover {background:var(--color-muted);}
+    td {color:var(--color-text);}
+    tr:last-child {border-bottom:none;}
+    .navigation-controls {
+        position:fixed;bottom:32px;left:50%; transform:translateX(-50%);
+        display:flex; gap:22px;
+        z-index:111;
+        background:rgba(31,49,60,0.95);
+        padding:10px 26px;
+        border-radius:90px;
+        box-shadow: 0 1px 16px #16353a55;
+        border:1.5px solid var(--color-border);
+        backdrop-filter: blur(3px);
+    }
+    .nav-btn {
+        background: var(--color-primary);
+        color: #191c21;
+        border: none;
+        padding: 12px 36px;
+        border-radius: 60px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size:1.04rem;
+        letter-spacing: .5px;
+        box-shadow: 0 2px 8px #0ca68733;
+        transition: var(--transition);
+        outline:none;
+    }
+    .nav-btn:hover, .nav-btn:focus {
+        background: var(--color-primary-light);
+        transform: translateY(-2px) scale(1.03);
+        box-shadow: 0 2px 16px var(--color-accent2);
+        color:#131c23;
+    }
+    .nav-btn:disabled {opacity:.45; cursor:not-allowed;}
+    .references {margin-top:30px;font-size:1.05rem;color:var(--color-text-faded);}
+    /* Responsive adjustments */
+    @media (max-width:900px) {.slide-content {max-width:99vw;min-height:350px;padding:24px 2vw;}}
+    @media (max-width:650px) {
+        .slide-content {padding:14px 3vw;}
+        .slide-content .slide-img {max-width:80%;}
+        .content-grid, .instrument-grid, .currency-grid {grid-template-columns:1fr;}
+        .author-info {font-size:.93rem;padding:8px 8px;}
+        .slide-counter {top:9px;right:8px;}
+        .navigation-controls {bottom:14px;padding:4px 6px;}
+        .nav-btn {padding:10px 16px;font-size:.98rem;}
+    }
+    </style>
 </head>
 <body>
     <div class="presentation-container">
-        <!-- Progress indicator -->
-        <div class="progress-bar">
-            <div class="progress-fill"></div>
-        </div>
-
-        <!-- Slide counter -->
-        <div class="slide-counter">
-            <span id="current-slide">1</span> dari <span id="total-slides">10</span>
-        </div>
-
-        <!-- Slides container -->
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <div class="slide-counter"><span id="current-slide">1</span> dari <span id="total-slides">10</span></div>
         <div class="slides-wrapper">
-            
             <!-- Slide 1: Title -->
             <div class="slide active" data-slide="1">
                 <div class="slide-content title-slide">
                     <div class="islamic-pattern"></div>
+                    <img src="img/logo.png" alt="logo institusi" class="slide-img">
                     <h1>Perkembangan Ekonomi Islam pada Masa Dinasti Abbasiyyah</h1>
                     <h2>Analisis Sistem Fiskal, Instrumen Keuangan, dan Perdagangan Internasional</h2>
                     <div class="author-info">
@@ -34,238 +267,140 @@
                     </div>
                 </div>
             </div>
-
             <!-- Slide 2: Outline -->
             <div class="slide" data-slide="2">
                 <div class="slide-content">
                     <h1>Outline Presentasi</h1>
+                    <img src="img/pertaStrategis.png" alt="Peta Strategis" class="slide-img">
                     <div class="outline-list">
-                        <div class="outline-item">
-                            <span class="number">1</span>
-                            <span class="text">Latar Belakang & Konteks Sejarah</span>
-                        </div>
-                        <div class="outline-item">
-                            <span class="number">2</span>
-                            <span class="text">Sistem Fiskal dan Perpajakan</span>
-                        </div>
-                        <div class="outline-item">
-                            <span class="number">3</span>
-                            <span class="text">Inovasi Instrumen Keuangan Islam</span>
-                        </div>
-                        <div class="outline-item">
-                            <span class="number">4</span>
-                            <span class="text">Jaringan Perdagangan Internasional</span>
-                        </div>
-                        <div class="outline-item">
-                            <span class="number">5</span>
-                            <span class="text">Inovasi Moneter & Urbanisasi</span>
-                        </div>
-                        <div class="outline-item">
-                            <span class="number">6</span>
-                            <span class="text">Kesimpulan & Relevansi Modern</span>
-                        </div>
+                        <div class="outline-item"><span class="number">1</span><span class="text">Latar Belakang & Konteks Sejarah</span></div>
+                        <div class="outline-item"><span class="number">2</span><span class="text">Sistem Fiskal dan Perpajakan</span></div>
+                        <div class="outline-item"><span class="number">3</span><span class="text">Inovasi Instrumen Keuangan Islam</span></div>
+                        <div class="outline-item"><span class="number">4</span><span class="text">Jaringan Perdagangan Internasional</span></div>
+                        <div class="outline-item"><span class="number">5</span><span class="text">Inovasi Moneter & Urbanisasi</span></div>
+                        <div class="outline-item"><span class="number">6</span><span class="text">Kesimpulan & Relevansi Modern</span></div>
                     </div>
                 </div>
             </div>
-
             <!-- Slide 3: Background -->
             <div class="slide" data-slide="3">
                 <div class="slide-content">
                     <h1>Baghdad: Pusat Ekonomi Strategis</h1>
+                    <img src="img/jaringanPerdagangan.png" alt="Jaringan Perdagangan" class="slide-img">
                     <div class="content-grid">
-                        <div class="point-card">
-                            <h3>📍 Posisi Geografis</h3>
-                            <p>Terletak di sungai Tigris yang memberikan akses strategis untuk transportasi dan perdagangan</p>
-                        </div>
-                        <div class="point-card">
-                            <h3>🛤️ Persimpangan Perdagangan</h3>
-                            <p>Menjadi titik temu jalur perdagangan darat dan laut yang menghubungkan Timur dan Barat</p>
-                        </div>
-                        <div class="point-card">
-                            <h3>🏛️ Pusat Administrasi</h3>
-                            <p>Berfungsi sebagai pusat pemerintahan dan budaya Dinasti Abbasiyyah</p>
-                        </div>
-                        <div class="point-card">
-                            <h3>💰 Inovasi Fiskal</h3>
-                            <p>Mengembangkan kebijakan fiskal yang sesuai dengan prinsip-prinsip syariah Islam</p>
-                        </div>
+                        <div class="point-card"><h3>📍 Posisi Geografis</h3><p>Terletak di sungai Tigris yang memberikan akses strategis untuk transportasi dan perdagangan</p></div>
+                        <div class="point-card"><h3>🛤️ Persimpangan Perdagangan</h3><p>Menjadi titik temu jalur perdagangan darat dan laut yang menghubungkan Timur dan Barat</p></div>
+                        <div class="point-card"><h3>🏛️ Pusat Administrasi</h3><p>Berfungsi sebagai pusat pemerintahan dan budaya Dinasti Abbasiyyah</p></div>
+                        <div class="point-card"><h3>💰 Inovasi Fiskal</h3><p>Mengembangkan kebijakan fiskal yang sesuai dengan prinsip-prinsip syariah Islam</p></div>
                     </div>
                 </div>
             </div>
-
             <!-- Slide 4: Fiscal System -->
             <div class="slide" data-slide="4">
                 <div class="slide-content">
                     <h1>Struktur Fiskal Dinasti Abbasiyyah</h1>
+                    <img src="img/fulusKuningan.png" alt="Fulus Kuningan" class="slide-img">
                     <div class="fiscal-table-container">
                         <table class="fiscal-table">
-                            <thead>
-                                <tr>
-                                    <th>Jenis Pajak</th>
-                                    <th>Persentase</th>
-                                    <th>Deskripsi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>Kharaj</strong></td>
-                                    <td>45-50%</td>
-                                    <td>Pajak tanah pertanian</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Jizyah</strong></td>
-                                    <td>15-20%</td>
-                                    <td>Non-Muslim per kapita</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Ushr</strong></td>
-                                    <td>20-25%</td>
-                                    <td>Hasil pertanian Muslim</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Zakat</strong></td>
-                                    <td>10-15%</td>
-                                    <td>Harta/perdagangan Muslim</td>
-                                </tr>
-                            </tbody>
+                        <thead>
+                            <tr>
+                            <th>Jenis Pajak</th>
+                            <th>Persentase</th>
+                            <th>Deskripsi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            <td><strong>Kharaj</strong></td>
+                            <td>45-50%</td>
+                            <td>Pajak tanah pertanian</td>
+                            </tr>
+                            <tr>
+                            <td><strong>Jizyah</strong></td>
+                            <td>15-20%</td>
+                            <td>Non-Muslim per kapita</td>
+                            </tr>
+                            <tr>
+                            <td><strong>Ushr</strong></td>
+                            <td>20-25%</td>
+                            <td>Hasil pertanian Muslim</td>
+                            </tr>
+                            <tr>
+                            <td><strong>Zakat</strong></td>
+                            <td>10-15%</td>
+                            <td>Harta/perdagangan Muslim</td>
+                            </tr>
+                        </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-
             <!-- Slide 5: Financial Instruments -->
             <div class="slide" data-slide="5">
                 <div class="slide-content">
                     <h1>Inovasi Instrumen Keuangan Islam</h1>
+                    <img src="img/dinar.png" alt="Dinar" class="slide-img">
                     <div class="instrument-grid">
-                        <div class="instrument-card">
-                            <div class="instrument-icon">📜</div>
-                            <h3>Suftajah</h3>
-                            <p>Surat kredit/jaminan pembayaran yang memfasilitasi perdagangan jarak jauh</p>
-                        </div>
-                        <div class="instrument-card">
-                            <div class="instrument-icon">💱</div>
-                            <h3>Hawalah</h3>
-                            <p>Transfer dana lintas wilayah tanpa perlu memindahkan uang fisik</p>
-                        </div>
-                        <div class="instrument-card">
-                            <div class="instrument-icon">🕌</div>
-                            <h3>Waqf</h3>
-                            <p>Investasi sosial berkelanjutan untuk kesejahteraan masyarakat</p>
-                        </div>
+                        <div class="instrument-card"><div class="instrument-icon">📜</div><h3>Suftajah</h3><p>Surat kredit/jaminan pembayaran yang memfasilitasi perdagangan jarak jauh</p></div>
+                        <div class="instrument-card"><div class="instrument-icon">💱</div><h3>Hawalah</h3><p>Transfer dana lintas wilayah tanpa perlu memindahkan uang fisik</p></div>
+                        <div class="instrument-card"><div class="instrument-icon">🕌</div><h3>Waqf</h3><p>Investasi sosial berkelanjutan untuk kesejahteraan masyarakat</p></div>
                     </div>
                 </div>
             </div>
-
             <!-- Slide 6: Trade Routes -->
             <div class="slide" data-slide="6">
                 <div class="slide-content">
                     <h1>Jaringan Perdagangan Internasional</h1>
+                    <img src="img/jaringanPerdagangan.png" alt="Jaringan Perdagangan" class="slide-img">
                     <div class="trade-content">
-                        <div class="trade-item">
-                            <h3>🐪 Rute Sutra Darat</h3>
-                            <p>Jalur perdagangan darat yang menghubungkan Chang'an (China) ke wilayah Mediterania</p>
-                        </div>
-                        <div class="trade-item">
-                            <h3>⛵ Jalur Maritim</h3>
-                            <p>Rute perdagangan laut melalui Laut Merah dan Teluk Persia</p>
-                        </div>
-                        <div class="trade-item">
-                            <h3>🏛️ Baghdad sebagai Simpul Utama</h3>
-                            <p>Menjadi pusat distribusi dan perdagangan internasional</p>
-                        </div>
-                        <div class="trade-item">
-                            <h3>📮 Sistem Barid</h3>
-                            <p>Jaringan pos yang mendukung komunikasi dan administrasi perdagangan</p>
-                        </div>
+                        <div class="trade-item"><h3>🐪 Rute Sutra Darat</h3><p>Jalur perdagangan darat dari Chang'an (China) ke wilayah Mediterania</p></div>
+                        <div class="trade-item"><h3>⛵ Jalur Maritim</h3><p>Rute perdagangan laut melalui Laut Merah dan Teluk Persia</p></div>
+                        <div class="trade-item"><h3>🏛️ Baghdad sebagai Simpul Utama</h3><p>Pusat distribusi dan perdagangan internasional</p></div>
+                        <div class="trade-item"><h3>📮 Sistem Barid</h3><p>Jaringan pos untuk mendukung komunikasi dan administrasi perdagangan</p></div>
                     </div>
                 </div>
             </div>
-
             <!-- Slide 7: Currency System -->
             <div class="slide" data-slide="7">
                 <div class="slide-content">
                     <h1>Standardisasi Sistem Moneter</h1>
                     <div class="currency-grid">
-                        <div class="currency-card gold">
-                            <div class="currency-icon">🪙</div>
-                            <h3>Dinar</h3>
-                            <p>Mata uang emas dengan stempel khalifah untuk transaksi besar</p>
-                        </div>
-                        <div class="currency-card silver">
-                            <div class="currency-icon">⚪</div>
-                            <h3>Dirham</h3>
-                            <p>Mata uang perak standar untuk perdagangan menengah</p>
-                        </div>
-                        <div class="currency-card copper">
-                            <div class="currency-icon">🔴</div>
-                            <h3>Fulus</h3>
-                            <p>Mata uang tembaga untuk transaksi sehari-hari</p>
-                        </div>
+                        <div class="currency-card gold"><img src="img/dinar.png" alt="Dinar" class="slide-img"><h3>Dinar</h3><p>Mata uang emas dengan stempel khalifah untuk transaksi besar</p></div>
+                        <div class="currency-card silver"><img src="img/dirham.png" alt="Dirham" class="slide-img"><h3>Dirham</h3><p>Mata uang perak standar untuk perdagangan menengah</p></div>
+                        <div class="currency-card copper"><img src="img/fulusKuningan.png" alt="Fulus" class="slide-img"><h3>Fulus</h3><p>Mata uang tembaga untuk transaksi sehari-hari</p></div>
                     </div>
                 </div>
             </div>
-
             <!-- Slide 8: Urbanization -->
             <div class="slide" data-slide="8">
                 <div class="slide-content">
                     <h1>Dampak Sosial-Ekonomi: Urbanisasi</h1>
                     <div class="urbanization-table-container">
                         <table class="urbanization-table">
-                            <thead>
-                                <tr>
-                                    <th>Kota</th>
-                                    <th>Populasi</th>
-                                    <th>Peran Ekonomi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>Baghdad</strong></td>
-                                    <td>1-2 juta</td>
-                                    <td>Ibu kota dan pusat administrasi</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Basrah</strong></td>
-                                    <td>500K-800K</td>
-                                    <td>Pelabuhan utama</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Isfahan</strong></td>
-                                    <td>300K-500K</td>
-                                    <td>Industri tekstil</td>
-                                </tr>
-                            </tbody>
+                        <thead>
+                            <tr><th>Kota</th><th>Populasi</th><th>Peran Ekonomi</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Baghdad</strong></td><td>1-2 juta</td><td>Ibu kota dan pusat administrasi</td></tr>
+                            <tr><td><strong>Basrah</strong></td><td>500K-800K</td><td>Pelabuhan utama</td></tr>
+                            <tr><td><strong>Isfahan</strong></td><td>300K-500K</td><td>Industri tekstil</td></tr>
+                        </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-
             <!-- Slide 9: Conclusion -->
             <div class="slide" data-slide="9">
                 <div class="slide-content">
                     <h1>Kesimpulan & Relevansi Modern</h1>
                     <div class="conclusion-points">
-                        <div class="conclusion-item">
-                            <span class="bullet">✓</span>
-                            <p>Sistem fiskal berbasis syariah yang berhasil menciptakan stabilitas ekonomi</p>
-                        </div>
-                        <div class="conclusion-item">
-                            <span class="bullet">✓</span>
-                            <p>Instrumen keuangan Islam menjadi cikal bakal perbankan Islam modern</p>
-                        </div>
-                        <div class="conclusion-item">
-                            <span class="bullet">✓</span>
-                            <p>Peran strategis waqf dalam pembangunan infrastruktur sosial</p>
-                        </div>
-                        <div class="conclusion-item">
-                            <span class="bullet">✓</span>
-                            <p>Relevansi konsep-konsep tersebut untuk pengembangan fintech syariah</p>
-                        </div>
+                        <div class="conclusion-item"><span class="number">✓</span><p>Sistem fiskal berbasis syariah yang berhasil menciptakan stabilitas ekonomi</p></div>
+                        <div class="conclusion-item"><span class="number">✓</span><p>Instrumen keuangan Islam menjadi cikal bakal perbankan Islam modern</p></div>
+                        <div class="conclusion-item"><span class="number">✓</span><p>Peran strategis waqf dalam pembangunan infrastruktur sosial</p></div>
+                        <div class="conclusion-item"><span class="number">✓</span><p>Relevansi konsep-konsep tersebut untuk pengembangan fintech syariah</p></div>
                     </div>
                 </div>
             </div>
-
             <!-- Slide 10: References -->
             <div class="slide" data-slide="10">
                 <div class="slide-content">
@@ -279,20 +414,12 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
-        <!-- Navigation controls -->
         <div class="navigation-controls">
-            <button class="nav-btn" id="prev-btn" onclick="previousSlide()">
-                <span>← Sebelumnya</span>
-            </button>
-            <button class="nav-btn" id="next-btn" onclick="nextSlide()">
-                <span>Berikutnya →</span>
-            </button>
+            <button class="nav-btn" id="prev-btn" onclick="previousSlide()"><span>← Sebelumnya</span></button>
+            <button class="nav-btn" id="next-btn" onclick="nextSlide()"><span>Berikutnya →</span></button>
         </div>
     </div>
-
     <script src="app.js"></script>
 </body>
 </html>
