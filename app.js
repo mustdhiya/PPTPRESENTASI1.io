@@ -9,14 +9,14 @@ class PresentationApp {
         this.totalSlidesSpan = document.getElementById('total-slides');
         this.prevBtn = document.getElementById('prev-btn');
         this.nextBtn = document.getElementById('next-btn');
-        
+
         this.init();
     }
-    
+
     init() {
         // Set total slides
         this.totalSlidesSpan.textContent = this.totalSlides;
-        
+
         // Add keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight' || e.key === ' ') {
@@ -27,36 +27,36 @@ class PresentationApp {
                 this.previousSlide();
             }
         });
-        
+
         // Initialize first slide
         this.updateSlide();
-        
+
         // Add smooth scroll prevention
         document.addEventListener('wheel', (e) => {
             e.preventDefault();
         }, { passive: false });
-        
+
         // Add touch/swipe support for mobile
         this.addTouchSupport();
     }
-    
+
     addTouchSupport() {
         let touchStartX = 0;
         let touchEndX = 0;
-        
+
         document.addEventListener('touchstart', (e) => {
             touchStartX = e.changedTouches[0].screenX;
         });
-        
+
         document.addEventListener('touchend', (e) => {
             touchEndX = e.changedTouches[0].screenX;
             this.handleSwipe();
         });
-        
+
         const handleSwipe = () => {
             const swipeThreshold = 50;
             const diff = touchStartX - touchEndX;
-            
+
             if (Math.abs(diff) > swipeThreshold) {
                 if (diff > 0) {
                     // Swipe left - next slide
@@ -67,50 +67,50 @@ class PresentationApp {
                 }
             }
         };
-        
+
         this.handleSwipe = handleSwipe;
     }
-    
+
     nextSlide() {
         if (this.currentSlide < this.totalSlides) {
             this.currentSlide++;
             this.updateSlide();
         }
     }
-    
+
     previousSlide() {
         if (this.currentSlide > 1) {
             this.currentSlide--;
             this.updateSlide();
         }
     }
-    
+
     updateSlide() {
         // Remove active class from all slides
         this.slides.forEach(slide => {
             slide.classList.remove('active');
         });
-        
+
         // Add active class to current slide
         const currentSlideElement = document.querySelector(`[data-slide="${this.currentSlide}"]`);
         if (currentSlideElement) {
             currentSlideElement.classList.add('active');
         }
-        
+
         // Update progress bar
         const progressPercentage = (this.currentSlide / this.totalSlides) * 100;
         this.progressFill.style.width = `${progressPercentage}%`;
-        
+
         // Update slide counter
         this.currentSlideSpan.textContent = this.currentSlide;
-        
+
         // Update navigation buttons
         this.updateNavigationButtons();
-        
+
         // Add animation effects
         this.addSlideAnimations();
     }
-    
+
     updateNavigationButtons() {
         // Update previous button
         if (this.currentSlide === 1) {
@@ -120,7 +120,7 @@ class PresentationApp {
             this.prevBtn.disabled = false;
             this.prevBtn.style.opacity = '1';
         }
-        
+
         // Update next button
         if (this.currentSlide === this.totalSlides) {
             this.nextBtn.disabled = true;
@@ -130,28 +130,67 @@ class PresentationApp {
             this.nextBtn.style.opacity = '1';
         }
     }
-    
+
     addSlideAnimations() {
+        const effects = [
+            { // Fade in & slide up
+                style: (el, idx) => {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(40px)';
+                    setTimeout(() => {
+                        el.style.transition = 'all 0.6s cubic-bezier(.22,1,.36,1)';
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(0)';
+                    }, idx * 80 + 200);
+                }
+            },
+            { // Fade in & scale
+                style: (el, idx) => {
+                    el.style.opacity = '0';
+                    el.style.transform = 'scale(0.96)';
+                    setTimeout(() => {
+                        el.style.transition = 'all 0.5s cubic-bezier(.36,1.28,.38,.93)';
+                        el.style.opacity = '1';
+                        el.style.transform = 'scale(1)';
+                    }, idx * 90 + 140);
+                }
+            },
+            { // Bounce
+                style: (el, idx) => {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(60px)';
+                    setTimeout(() => {
+                        el.style.transition = 'all 0.6s cubic-bezier(.68,-0.55,.27,1.55)';
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(0)';
+                    }, idx * 85 + 180);
+                }
+            },
+            { // Slide from left
+                style: (el, idx) => {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateX(-35px)';
+                    setTimeout(() => {
+                        el.style.transition = 'all 0.55s cubic-bezier(0.16, 1, 0.3, 1)';
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateX(0)';
+                    }, idx * 90 + 140);
+                }
+            }
+        ];
         const currentSlideElement = document.querySelector(`[data-slide="${this.currentSlide}"]`);
         if (!currentSlideElement) return;
-        
-        // Animate elements within the slide
         const animatedElements = currentSlideElement.querySelectorAll(
             '.outline-item, .point-card, .instrument-card, .trade-item, .conclusion-item, .currency-card, table'
         );
-        
+        // Pilih animasi random untuk slide ini
+        const chosen = effects[Math.floor(Math.random() * effects.length)];
         animatedElements.forEach((element, index) => {
-            element.style.opacity = '0';
-            element.style.transform = 'translateY(20px)';
-            
-            setTimeout(() => {
-                element.style.transition = 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
-                element.style.opacity = '1';
-                element.style.transform = 'translateY(0)';
-            }, index * 100 + 200);
+            chosen.style(element, index);
         });
     }
-    
+
+
     // Method to go to a specific slide (useful for future enhancements)
     goToSlide(slideNumber) {
         if (slideNumber >= 1 && slideNumber <= this.totalSlides) {
@@ -177,10 +216,10 @@ function previousSlide() {
 // Initialize the presentation when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.presentationApp = new PresentationApp();
-    
+
     // Add some visual enhancements
     addVisualEnhancements();
-    
+
     // Add accessibility features
     addAccessibilityFeatures();
 });
@@ -191,19 +230,19 @@ function addVisualEnhancements() {
     const interactiveElements = document.querySelectorAll(
         '.point-card, .instrument-card, .outline-item, .currency-card'
     );
-    
+
     interactiveElements.forEach(element => {
-        element.addEventListener('mouseenter', function() {
-            this.style.transform = this.style.transform.includes('scale') 
-                ? this.style.transform 
+        element.addEventListener('mouseenter', function () {
+            this.style.transform = this.style.transform.includes('scale')
+                ? this.style.transform
                 : (this.style.transform || '') + ' scale(1.02)';
         });
-        
-        element.addEventListener('mouseleave', function() {
+
+        element.addEventListener('mouseleave', function () {
             this.style.transform = this.style.transform.replace(' scale(1.02)', '');
         });
     });
-    
+
     // Add subtle parallax effect to background elements
     document.addEventListener('mousemove', (e) => {
         const islamicPattern = document.querySelector('.islamic-pattern');
@@ -223,19 +262,19 @@ function addAccessibilityFeatures() {
         slide.setAttribute('aria-label', `Slide ${index + 1} of ${slides.length}`);
         slide.setAttribute('role', 'img');
     });
-    
+
     // Add focus management
     const navButtons = document.querySelectorAll('.nav-btn');
     navButtons.forEach(button => {
-        button.addEventListener('focus', function() {
+        button.addEventListener('focus', function () {
             this.style.boxShadow = '0 0 0 3px rgba(33, 128, 141, 0.4)';
         });
-        
-        button.addEventListener('blur', function() {
+
+        button.addEventListener('blur', function () {
             this.style.boxShadow = '';
         });
     });
-    
+
     // Add screen reader announcements
     const slideCounter = document.querySelector('.slide-counter');
     if (slideCounter) {
@@ -247,29 +286,29 @@ function addAccessibilityFeatures() {
 // Utility functions for potential future enhancements
 const PresentationUtils = {
     // Method to export slide content (for future use)
-    exportSlideContent: function(slideNumber) {
+    exportSlideContent: function (slideNumber) {
         const slide = document.querySelector(`[data-slide="${slideNumber}"]`);
         if (slide) {
             return slide.innerHTML;
         }
         return null;
     },
-    
+
     // Method to add custom animations
-    addCustomAnimation: function(element, animationType) {
+    addCustomAnimation: function (element, animationType) {
         const animations = {
             fadeIn: 'opacity: 0; animation: fadeIn 0.5s ease-in-out forwards',
             slideUp: 'transform: translateY(50px); opacity: 0; animation: slideUp 0.5s ease-out forwards',
             bounce: 'animation: bounce 0.6s ease-in-out'
         };
-        
+
         if (animations[animationType]) {
             element.style.cssText += animations[animationType];
         }
     },
-    
+
     // Method to handle fullscreen mode (for future use)
-    toggleFullscreen: function() {
+    toggleFullscreen: function () {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen().catch(err => {
                 console.log(`Error attempting to enable fullscreen: ${err.message}`);
@@ -335,7 +374,7 @@ document.head.appendChild(style);
 function preloadNextSlide() {
     const currentSlideNum = window.presentationApp?.currentSlide || 1;
     const nextSlideNum = currentSlideNum + 1;
-    
+
     if (nextSlideNum <= 10) {
         const nextSlide = document.querySelector(`[data-slide="${nextSlideNum}"]`);
         if (nextSlide) {
