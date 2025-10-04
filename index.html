@@ -7,6 +7,8 @@
     <title>Perkembangan Ekonomi Islam - Dinasti Abbasiyyah</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="img/logo.png">
+
     <style>
         :root {
             --color-bg: #10151b;
@@ -499,6 +501,84 @@
 </head>
 
 <body>
+    <canvas id="night-bg-canvas"
+        style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:auto;"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+    <script>
+        var canvas = document.getElementById('night-bg-canvas');
+        var ctx = canvas.getContext('2d');
+        var cw = window.innerWidth, ch = window.innerHeight;
+        canvas.width = cw * window.devicePixelRatio;
+        canvas.height = ch * window.devicePixelRatio;
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+        // Array berisi gradient malam elegan
+        var gradients = [
+            { colors: ["#242445", "#233c6b"], direction: "vertical" },
+            { colors: ["#141825", "#385887"], direction: "vertical" },
+            { colors: ["#191330", "#24516b"], direction: "vertical" },
+            { colors: ["#062044", "#18497e"], direction: "vertical" },
+            { colors: ["#233c28", "#284161"], direction: "vertical" }
+        ];
+        var index = 0;
+
+        function drawBgGradient() {
+            var grad = gradients[index];
+            var g;
+            if (grad.direction === "vertical") {
+                g = ctx.createLinearGradient(0, 0, 0, ch);
+            } else {
+                g = ctx.createLinearGradient(0, 0, cw, ch);
+            }
+            // Dua warna gradient
+            g.addColorStop(0, grad.colors[0]);
+            g.addColorStop(1, grad.colors[1]);
+            ctx.fillStyle = g;
+            ctx.fillRect(0, 0, cw, ch);
+        }
+
+        function rippleEffect(x, y) {
+            var r = 0;
+            var maxR = Math.max(cw, ch);
+            var alpha = 0.5;
+            function animateRipple() {
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.beginPath();
+                ctx.arc(x, y, r, 0, 2 * Math.PI);
+                ctx.fillStyle = gradients[index].colors[1];
+                ctx.fill();
+                ctx.restore();
+                r += 22;
+                alpha -= 0.02;
+                if (r < maxR && alpha > 0) {
+                    requestAnimationFrame(animateRipple);
+                } else {
+                    drawBgGradient();
+                }
+            }
+            animateRipple();
+        }
+
+        canvas.addEventListener('click', function (e) {
+            index = (index + 1) % gradients.length;
+            drawBgGradient();
+            let rect = canvas.getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            let y = e.clientY - rect.top;
+            rippleEffect(x, y);
+        });
+        window.addEventListener('resize', function () {
+            cw = window.innerWidth; ch = window.innerHeight;
+            canvas.width = cw * window.devicePixelRatio;
+            canvas.height = ch * window.devicePixelRatio;
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            drawBgGradient();
+        });
+        drawBgGradient();
+    </script>
+
     <div class="landscape"></div>
     <div class="filter"></div>
     <canvas id="canvas"></canvas>
@@ -883,10 +963,25 @@
             <button class="nav-btn" id="prev-btn" onclick="previousSlide()"><span>← Sebelumnya</span></button>
             <button class="nav-btn" id="next-btn" onclick="nextSlide()"><span>Berikutnya →</span></button>
         </div>
+        <div class="custom-footer"
+            style="margin-top:18px;text-align:center;font-size:.98rem;color:var(--color-text-faded)">
+            &copy; 2025 Founder of MustDhiya'
+            &mdash;
+            <a href="https://mustdhiya-io.vercel.app/" target="_blank"
+                style="color:var(--color-accent2);text-decoration:underline;">Website</a>
+            &bull;
+            <a href="https://www.instagram.com/fauzan.ilham81/" target="_blank"
+                style="color:var(--color-accent2);text-decoration:underline;">@fauzan.ilham81</a>
+            &bull;
+            <a href="https://www.instagram.com/mustdhiya_tech/" target="_blank"
+                style="color:var(--color-accent2);text-decoration:underline;">@mustdhiya_tech</a>
+        </div>
+
     </div>
     <script src="https://codepen.io/Thibka/pen/ZKeddV.js"></script>
     <script src="app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dat.gui/build/dat.gui.min.js"></script>
+
     <script>
         function Star(id, x, y) {
             this.id = id;
